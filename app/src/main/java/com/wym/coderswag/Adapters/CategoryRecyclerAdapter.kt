@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wym.coderswag.Model.Category
 import com.wym.coderswag.R
 
-class CategoryRecyclerAdapter(val context : Context, val categories : List<Category>) : RecyclerView.Adapter<CategoryRecyclerAdapter.Holder>() {
+class CategoryRecyclerAdapter(val context : Context, val categories : List<Category>,val itemClick : (Category) -> Unit) : RecyclerView.Adapter<CategoryRecyclerAdapter.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
       val view = LayoutInflater.from(context).inflate(R.layout.list_view_item,parent,false)
-        return Holder(view)
+        return Holder(view,itemClick)
     }
 
     override fun getItemCount(): Int {
@@ -25,7 +25,7 @@ class CategoryRecyclerAdapter(val context : Context, val categories : List<Categ
         holder.bindCategory(context,categories[position])
     }
 
-    inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class Holder(itemView: View,itemClick: (Category) -> Unit) : RecyclerView.ViewHolder(itemView) {
         val catImageView : ImageView = itemView.findViewById(R.id.catImageView)
         val catTextView : TextView = itemView.findViewById(R.id.catTextView)
 
@@ -33,6 +33,8 @@ class CategoryRecyclerAdapter(val context : Context, val categories : List<Categ
             val resourceID = context.resources.getIdentifier(category.image,"drawable",context.packageName)
             catImageView.setImageResource(resourceID)
             catTextView.text = category.title
+
+            itemView.setOnClickListener { itemClick(category) }
         }
 
 
